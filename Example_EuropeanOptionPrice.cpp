@@ -31,19 +31,19 @@ void test_European_Option_Price()
 	std::cout<< "============================================================================"   <<std::endl<<std::endl;
 
 	PayOff* pay_off_call = new PayOffCall( strike );
-	EuropeanOption CallOption( pay_off_call );
-	std::cout<< "Call Option Price from analytical solution: "<<CallOption.price( spot, strike, sigma, r, T ) << std::endl;
+	BlackScholes Option_BS( spot, sigma, r, T , strike );
+	std::cout<< "Call Option Price from analytical solution: "<< Option_BS.price( pay_off_call ) << std::endl;
 
 	PayOff* pay_off_put = new PayOffPut( strike );
-	EuropeanOption PutOption( pay_off_put );
-	std::cout<< "Put Option Price from analytical solution: "<<PutOption.price( spot, strike, sigma, r, T ) << std::endl;
+	std::cout<< "Put Option Price from analytical solution: "<< Option_BS.price( pay_off_put ) << std::endl;
 
 	double dt   = 1./50.;
 	int M       = int(1e5);
 	Ullong seed = 1290832;
 
 	PathGen_GBM stock_path( spot,  sigma, r, T, dt, M, seed );
-	std::vector< std::vector<double>> stock_paths = stock_path.PathGenerator();
+	std::vector< std::vector<double>> stock_paths;
+	stock_path.PathGenerator( stock_paths );
 
 	double call_payoff = 0.;
 	for( int m = 0; m < M; m++ )

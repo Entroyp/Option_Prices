@@ -5,10 +5,9 @@
 #include <cmath>
 #include <iostream>
 
-std::vector< std::vector<double>> PathGen_GBM::PathGenerator() const {
+void PathGen_GBM::PathGenerator( std::vector< std::vector<double>>& stock_path ) const {
 
-  std::vector< std::vector<double>> Mat( M );
-
+  stock_path.resize( M );
   int N            = int( T*(1./dt) );  
   double drift     = r*dt - sigma*sigma*0.5*dt;
   double diffusion = sigma*sqrt(dt);
@@ -17,11 +16,10 @@ std::vector< std::vector<double>> PathGen_GBM::PathGenerator() const {
 
   for( int i = 0; i < M; i++ )
   {
-    Mat[ i ].push_back( spot*exp( drift + diffusion*normal_dev.dev() ) );
+    stock_path[ i ].push_back( spot*exp( drift + diffusion*normal_dev.dev() ) );
      for( int j = 1; j < N; j++ )
-      Mat[ i ].push_back( Mat[ i ][ j-1 ]*exp( drift + diffusion*normal_dev.dev() ) );
+      stock_path[ i ].push_back( stock_path[ i ][ j-1 ]*exp( drift + diffusion*normal_dev.dev() ) );
   };
-  return( Mat );
 };
 
 
@@ -81,7 +79,4 @@ void PathGen_StoVol::PathGenerator( std::vector< std::vector< double > >& stock_
   };
 
 };
-
-
-
 

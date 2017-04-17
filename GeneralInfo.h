@@ -4,7 +4,9 @@
 
 #define PAYOFF_CALL "Call"
 #define PAYOFF_PUT  "Put"
-
+#define STO_VOL     "StoVol"
+#define FLAT_VOL    "FlatVol"
+#define PI  3.141592653589793
 
 
 class MC_Price{

@@ -89,15 +89,16 @@ void test_American_Option_Price()
 	Ullong seed = 1290832;
 
 	PathGen_GBM stock_path( spot,  sigma, r, T, dt, M, seed );
-	std::vector< std::vector<double>> stock_paths = stock_path.PathGenerator();
+	std::vector< std::vector<double>> stock_paths;
+	stock_path.PathGenerator( stock_paths );
+	BlackScholes Option_BS( spot, sigma, r, T , strike );
 
 	std::cout<< "American Put Result"<<std::endl;
 	std::cout<< "============================================================================="<<endl;
 
 	PayOff* pay_off_put = new PayOffPut( strike );
-	EuropeanOption PutOption( pay_off_put );
 	std::cout<< "European put option price: " << std::endl;
-	std::cout<< "Price: " << PutOption.price( spot, strike, sigma, r, T ) << std::endl;
+	std::cout<< "Price: " << Option_BS.price( pay_off_put ) << std::endl;
 
 	BASIS* basis_laguerre = new BASIS_Laguerre;
 	LSRegression_GBM Regression_Laguerre_put( spot, r, dt, pay_off_put, basis_laguerre, stock_paths );
@@ -116,9 +117,9 @@ void test_American_Option_Price()
 	std::cout<< "============================================================================="<<std::endl;
 
 	PayOff* pay_off_call = new PayOffCall( strike );
-	EuropeanOption CallOption( pay_off_call );
-	std::cout<< "European call option price: " << CallOption.price( spot, strike, sigma, r, T ) << std::endl;
 
+
+	std::cout<< "European call option price: " <<  Option_BS.price( pay_off_call ) << std::endl;
 	LSRegression_GBM Regression_Laguerre_call( spot, r, dt, pay_off_call, basis_laguerre, stock_paths );
 	res_laguerre = Regression_Laguerre_call.Regression();
 	std::cout<<"American call option price with Laguerre Base: "<<std::endl;

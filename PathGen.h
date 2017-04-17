@@ -9,7 +9,6 @@ class PathGen{
 public:
 	PathGen(){};
 	virtual ~PathGen(){};
-	virtual std::vector< std::vector<double>> PathGenerator() const = 0;
 };
 
 class PathGen_GBM: public PathGen {
@@ -26,7 +25,7 @@ public:
 	PathGen_GBM(const double& _spot, const double& _sigma, const double& _r, const double& _T, const double& _dt, const int& _M, const Ullong& _seed ):
 		spot( _spot ), sigma( _sigma ), r(_r), T(_T), dt(_dt), M(_M), seed(_seed ){};
 	virtual ~PathGen_GBM() {};
-	virtual std::vector< std::vector<double>> PathGenerator() const;
+	void PathGenerator( std::vector< std::vector< double > >& stock_path ) const;
 };
 
 class PathGen_StoVol: public PathGen {
@@ -54,6 +53,7 @@ public:
 	spot(_spot), r(_r), volofvol(_volofvol), kappa(_kappa), v0(_v0),
 	rho(_rho),   theta(_theta), T(_T), dt(_dt), M(_M), seed(_seed){};
 	virtual ~PathGen_StoVol() {};
+
 	virtual void PathGenerator( std::vector< std::vector< double > >& stock_path, 
 		                        std::vector< std::vector< double > >& vol_path ) const;
 };

@@ -36,7 +36,7 @@ std::vector< double > LSRegression::OLS(
 
 	std::vector<double> output;
 
-	for( size_t i = 0; i < sol.nrows(); i++ )
+	for( int i = 0; i < sol.nrows(); i++ )
 		output.push_back( sol[ i ][0] );
 
 	return( output );
